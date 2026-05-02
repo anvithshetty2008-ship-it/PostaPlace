@@ -7,6 +7,7 @@ import { getVerifiedPlacesPage } from '../../firebase'
 export default function Explore() {
   const [places, setPlaces] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [loadingMore, setLoadingMore] = useState(false)
   const [lastDoc, setLastDoc] = useState(null)
   const [hasMore, setHasMore] = useState(true)
@@ -16,8 +17,12 @@ export default function Explore() {
     let mounted = true
     ;(async () => {
       try {
-        const { places: firstPage, lastDoc: cursor } = await getVerifiedPlacesPage(20, null)
+        const { places: firstPage, lastDoc: cursor, error: fetchError } = await getVerifiedPlacesPage(20, null)
         if (!mounted) return
+        if (fetchError) {
+          setError(fetchError)
+          return
+        }
         setPlaces(firstPage)
         setLastDoc(cursor)
         setHasMore(firstPage.length === 20 && !!cursor)
@@ -31,7 +36,7 @@ export default function Explore() {
   }, [])
 
   const loadMore = async () => {
-    if (loadingMore || !hasMore) return
+    if (loadingMore || !hasMore || error) return
     setLoadingMore(true)
     try {
       const { places: nextPage, lastDoc: cursor } = await getVerifiedPlacesPage(20, lastDoc)
@@ -46,7 +51,7 @@ export default function Explore() {
   useEffect(() => {
     const el = loadMoreRef.current
     if (!el) return
-    if (!hasMore) return
+    if (!hasMore || error) return
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -57,10 +62,20 @@ export default function Explore() {
 
     observer.observe(el)
     return () => observer.disconnect()
-  }, [hasMore, lastDoc, loadingMore])
+  }, [hasMore, lastDoc, loadingMore, error])
 
   if (loading) {
     return <div style={{ textAlign: 'center', padding: '40px' }}>Loading places...</div>
+  }
+
+  if (error) {
+    return (
+      <div style={{ padding: '40px', color: 'red' }}>
+        <h3>Database Error</h3>
+        <p>{error.message}</p>
+        <p>If it says "The query requires an index", open your browser Developer Tools (F12) to find the clickable link to create the index, or copy the link from the console.</p>
+      </div>
+    )
   }
 
   if (!places.length) {

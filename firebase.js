@@ -56,10 +56,10 @@ export async function getVerifiedPlacesPage(pageSize = 20, lastDoc = null) {
     const snapshot = await getDocs(q)
     const places = snapshot.docs.map(d => ({ id: d.id, ...d.data() }))
     const newLastDoc = snapshot.docs.length ? snapshot.docs[snapshot.docs.length - 1] : null
-    return { places, lastDoc: newLastDoc }
+    return { places, lastDoc: newLastDoc, error: null }
   } catch (error) {
     console.error('Error fetching places page:', error)
-    return { places: [], lastDoc: null }
+    return { places: [], lastDoc: null, error }
   }
 }
 
