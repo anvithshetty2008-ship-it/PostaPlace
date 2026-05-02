@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc, query, where, getDocs, updateDoc, deleteDoc, doc, getDoc, orderBy, limit, startAfter } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,6 +15,27 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+export const auth = getAuth(app);
+
+// Functions for authentication
+export async function adminLogin(email, password) {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  } catch (error) {
+    console.error('Error logging in:', error);
+    throw error;
+  }
+}
+
+export async function adminLogout() {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error('Error logging out:', error);
+    throw error;
+  }
+}
 
 // Functions for database operations
 export async function submitPlace(placeData) {

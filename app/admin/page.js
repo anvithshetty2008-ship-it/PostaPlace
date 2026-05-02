@@ -1,26 +1,51 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getUnverifiedPlaces, verifyPlace, deletePlace } from '../../firebase'
-
-const ADMIN_EMAIL = 'anvithshetty2008@gmail.com'
+import { getUnverifiedPlaces, verifyPlace, deletePlace, adminLogin, adminLogout, auth } from '../../firebase'
+import { onAuthStateChanged } from 'firebase/auth'
 
 export default function Admin() {
   const [adminPlaces, setAdminPlaces] = useState([])
   const [loading, setLoading] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [message, setMessage] = useState(null)
+  const [authChecking, setAuthChecking] = useState(true)
 
-  const handleLogin = (e) => {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsAdmin(true)
+        setEmail(user.email)
+        fetchPlaces()
+      } else {
+        setIsAdmin(false)
+      }
+      setAuthChecking(false)
+    })
+    return () => unsubscribe()
+  }, [])
+
+  const handleLogin = async (e) => {
     e.preventDefault()
-    if (email === ADMIN_EMAIL) {
+    setMessage(null)
+    try {
+      await adminLogin(email, password)
       setIsAdmin(true)
       fetchPlaces()
       setMessage({ type: 'success', text: 'Admin access granted' })
-    } else {
-      setMessage({ type: 'error', text: 'Unauthorized access' })
+    } catch (error) {
+      console.error(error)
+      setMessage({ type: 'error', text: 'Unauthorized access. Invalid email or password.' })
     }
+  }
+
+  const handleLogout = async () => {
+    await adminLogout()
+    setIsAdmin(false)
+    setEmail('')
+    setPassword('')
   }
 
   const fetchPlaces = async () => {
@@ -58,6 +83,10 @@ export default function Admin() {
     }
   }
 
+  if (authChecking) {
+    return <div style={{ textAlign: 'center', padding: '40px' }}>Loading...</div>
+  }
+
   if (!isAdmin) {
     return (
       <form onSubmit={handleLogin} style={{ maxWidth: '400px' }}>
@@ -73,6 +102,16 @@ export default function Admin() {
             required
           />
         </div>
+        <div className="form-group">
+          <label>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter password"
+            required
+          />
+        </div>
         <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
           Login
         </button>
@@ -84,7 +123,7 @@ export default function Admin() {
     <div>
       <div style={{ marginBottom: '20px', display: 'flex', gap: '10px', alignItems: 'center' }}>
         <span>Logged in as: <strong>{email}</strong></span>
-        <button className="btn btn-secondary" onClick={() => setIsAdmin(false)} style={{ padding: '8px 15px' }}>
+        <button className="btn btn-secondary" onClick={handleLogout} style={{ padding: '8px 15px' }}>
           Logout
         </button>
       </div>
