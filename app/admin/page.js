@@ -98,8 +98,10 @@ export default function Admin() {
         <table className="admin-table">
           <thead>
             <tr>
+              <th>Photo</th>
               <th>Place Name</th>
-              <th>State</th>
+              <th>Location Info</th>
+              <th>Details</th>
               <th>Submitted By</th>
               <th>Actions</th>
             </tr>
@@ -107,16 +109,36 @@ export default function Admin() {
           <tbody>
             {adminPlaces.map((place) => (
               <tr key={place.id}>
-                <td><strong>{place.place_name}</strong></td>
-                <td>{place.state}</td>
-                <td>{place.submitted_by_name}</td>
                 <td>
-                  <button className="btn-small btn-verify" onClick={() => handleVerify(place.id)}>
-                    Verify
-                  </button>
-                  <button className="btn-small btn-delete" onClick={() => handleDelete(place.id)}>
-                    Delete
-                  </button>
+                  {place.photo ? (
+                    <img src={place.photo} alt={place.place_name} style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '8px' }} />
+                  ) : (
+                    <span style={{ color: '#888' }}>No Photo</span>
+                  )}
+                </td>
+                <td><strong>{place.place_name}</strong><br/><span style={{ fontSize: '0.85em', color: '#666' }}>{place.category}</span></td>
+                <td>
+                  {place.district ? `${place.district}, ` : ''}{place.state}
+                </td>
+                <td style={{ maxWidth: '200px' }}>
+                  <div style={{ fontSize: '0.9em', maxHeight: '100px', overflowY: 'auto' }}>
+                    {place.description || 'No description'}
+                  </div>
+                </td>
+                <td>
+                  {place.submitted_by_name}<br/>
+                  {place.instagram && <span style={{ fontSize: '0.85em', color: '#e1306c' }}>@{place.instagram}</span>}<br/>
+                  {place.phone && <span style={{ fontSize: '0.85em', color: '#555' }}>{place.phone}</span>}
+                </td>
+                <td>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <button className="btn-small btn-verify" onClick={() => handleVerify(place.id)}>
+                      Verify
+                    </button>
+                    <button className="btn-small btn-delete" onClick={() => handleDelete(place.id)}>
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
