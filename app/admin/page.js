@@ -40,7 +40,8 @@ export default function Admin() {
       setMessage({ type: 'success', text: 'Place verified!' })
       fetchPlaces()
     } catch (error) {
-      setMessage({ type: 'error', text: 'Error verifying' })
+      console.error(error)
+      setMessage({ type: 'error', text: `Error verifying: ${error.message}` })
     }
   }
 
@@ -51,7 +52,8 @@ export default function Admin() {
         setMessage({ type: 'success', text: 'Place deleted!' })
         fetchPlaces()
       } catch (error) {
-        setMessage({ type: 'error', text: 'Error deleting' })
+        console.error(error)
+        setMessage({ type: 'error', text: `Error deleting: ${error.message}` })
       }
     }
   }
