@@ -21,6 +21,8 @@ export default function Submit() {
     instagram: '',
   })
 
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
   const handleImageChange = (e) => {
     const file = e.target.files[0]
     if (file) {
@@ -39,6 +41,7 @@ export default function Submit() {
     }
 
     setLoading(true)
+    setMessage(null)
     try {
       let photoUrl = null
       if (formData.photo) {
@@ -50,10 +53,12 @@ export default function Submit() {
         photo: photoUrl,
       })
 
-      setMessage({ type: 'success', text: 'Place submitted! Waiting for admin approval.' })
-      setTimeout(() => router.push('/'), 2000)
+      setIsSubmitted(true)
+      setMessage({ type: 'success', text: 'Place submitted! Waiting for admin approval. Please refresh the page to submit another.' })
+      // Removed the automatic redirect so the user has to refresh
     } catch (error) {
-      setMessage({ type: 'error', text: 'Error submitting place' })
+      console.error(error)
+      setMessage({ type: 'error', text: `Error submitting place: ${error.message || 'Unknown error'}. If it says permission denied, check Firebase Storage rules.` })
     }
     setLoading(false)
   }
@@ -155,8 +160,8 @@ export default function Submit() {
         />
       </div>
 
-      <button type="submit" className="btn btn-primary" disabled={loading}>
-        {loading ? 'Submitting...' : 'Submit Place'}
+      <button type="submit" className="btn btn-primary" disabled={loading || isSubmitted}>
+        {loading ? 'Submitting...' : isSubmitted ? 'Submitted' : 'Submit Place'}
       </button>
     </form>
   )
