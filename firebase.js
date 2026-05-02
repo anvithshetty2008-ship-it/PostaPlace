@@ -48,7 +48,6 @@ export async function getVerifiedPlacesPage(pageSize = 20, lastDoc = null) {
     const base = [
       collection(db, 'places'),
       where('is_verified', '==', true),
-      orderBy('created_date', 'desc'),
       limit(pageSize),
     ]
 
