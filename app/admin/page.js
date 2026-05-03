@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getUnverifiedPlaces, verifyPlace, deletePlace } from '../../firebase'
+import { getUnverifiedPlaces, verifyPlace, deletePlace, updatePlaceAddress } from '../../firebase'
 
 const ADMIN_EMAIL = 'anvithshetty2008@gmail.com'
 
@@ -11,6 +11,7 @@ export default function Admin() {
   const [isAdmin, setIsAdmin] = useState(false)
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState(null)
+  const [addresses, setAddresses] = useState({})
 
   const handleLogin = (e) => {
     e.preventDefault()
@@ -42,6 +43,21 @@ export default function Admin() {
     } catch (error) {
       console.error(error)
       setMessage({ type: 'error', text: `Error verifying: ${error.message}` })
+    }
+  }
+
+  const handleAddressChange = (id, value) => {
+    setAddresses(prev => ({ ...prev, [id]: value }))
+  }
+
+  const handleSaveAddress = async (id) => {
+    try {
+      await updatePlaceAddress(id, addresses[id] || '')
+      setMessage({ type: 'success', text: 'Address saved!' })
+      fetchPlaces()
+    } catch (error) {
+      console.error(error)
+      setMessage({ type: 'error', text: `Error saving address: ${error.message}` })
     }
   }
 
@@ -103,6 +119,7 @@ export default function Admin() {
               <th>Photo</th>
               <th>Place Name</th>
               <th>Location Info</th>
+              <th>Address</th>
               <th>Details</th>
               <th>Submitted By</th>
               <th>Actions</th>
@@ -121,6 +138,18 @@ export default function Admin() {
                 <td><strong>{place.place_name}</strong><br/><span style={{ fontSize: '0.85em', color: '#666' }}>{place.category}</span></td>
                 <td>
                   {place.district ? `${place.district}, ` : ''}{place.state}
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    placeholder="Enter full address"
+                    value={addresses[place.id] !== undefined ? addresses[place.id] : (place.address || '')}
+                    onChange={(e) => handleAddressChange(place.id, e.target.value)}
+                    style={{ width: '100%', padding: '6px', marginBottom: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                  />
+                  <button className="btn-small" style={{ background: '#4caf50', width: '100%' }} onClick={() => handleSaveAddress(place.id)}>
+                    Save Address
+                  </button>
                 </td>
                 <td style={{ maxWidth: '200px' }}>
                   <div style={{ fontSize: '0.9em', maxHeight: '100px', overflowY: 'auto' }}>

@@ -104,6 +104,17 @@ export async function deletePlace(placeId) {
   }
 }
 
+export async function updatePlaceAddress(placeId, address) {
+  try {
+    await updateDoc(doc(db, 'places', placeId), {
+      address: address,
+    });
+  } catch (error) {
+    console.error('Error updating address:', error);
+    throw error;
+  }
+}
+
 export async function uploadImage(file, fileName) {
   try {
     const storageRef = ref(storage, `places/${Date.now()}-${fileName}`);
