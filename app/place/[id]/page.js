@@ -60,21 +60,26 @@ export default function PlaceDetail({ params }) {
             <div>{place.submitted_by_name || '—'}</div>
           </div>
         </div>
-        {place.address && (
-          <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
-            <h3 style={{ marginBottom: '10px', fontSize: '1.1em' }}>Location Address</h3>
-            <p style={{ marginBottom: '15px' }}>{place.address}</p>
-            <a 
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.address)}`}
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="btn btn-primary"
-              style={{ display: 'inline-block' }}
-            >
-              View on Google Maps
-            </a>
-          </div>
-        )}
+        {(() => {
+          const autoAddress = `${place.place_name}, ${place.district ? place.district + ', ' : ''}${place.state}`;
+          const displayAddress = place.address || autoAddress;
+          
+          return (
+            <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
+              <h3 style={{ marginBottom: '10px', fontSize: '1.1em' }}>Location Address</h3>
+              <p style={{ marginBottom: '15px' }}>{displayAddress}</p>
+              <a 
+                href={`https://www.google.com/maps/search/${encodeURIComponent(displayAddress)}`}
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="btn btn-primary"
+                style={{ display: 'inline-block' }}
+              >
+                View on Google Maps
+              </a>
+            </div>
+          );
+        })()}
         <p style={{ color: '#555', lineHeight: 1.7, marginTop: '20px' }}>{place.description || 'No description provided.'}</p>
         <div style={{ marginTop: '25px' }}>
           <Link href="/explore" className="btn btn-secondary">

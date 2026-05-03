@@ -140,13 +140,19 @@ export default function Admin() {
                   {place.district ? `${place.district}, ` : ''}{place.state}
                 </td>
                 <td>
-                  <input
-                    type="text"
-                    placeholder="Enter full address"
-                    value={addresses[place.id] !== undefined ? addresses[place.id] : (place.address || '')}
-                    onChange={(e) => handleAddressChange(place.id, e.target.value)}
-                    style={{ width: '100%', padding: '6px', marginBottom: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-                  />
+                  {(() => {
+                    const autoAddress = `${place.place_name}, ${place.district ? place.district + ', ' : ''}${place.state}`;
+                    const defaultValue = place.address || autoAddress;
+                    return (
+                      <input
+                        type="text"
+                        placeholder="Enter full address"
+                        value={addresses[place.id] !== undefined ? addresses[place.id] : defaultValue}
+                        onChange={(e) => handleAddressChange(place.id, e.target.value)}
+                        style={{ width: '100%', padding: '6px', marginBottom: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                      />
+                    );
+                  })()}
                   <button className="btn-small" style={{ background: '#4caf50', width: '100%' }} onClick={() => handleSaveAddress(place.id)}>
                     Save Address
                   </button>
