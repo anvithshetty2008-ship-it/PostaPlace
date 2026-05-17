@@ -11,15 +11,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <div className="app">
-          <header style={{ textAlign: 'center' }}>
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '15px' }}>
-              <img 
-                src="/logo.png" 
-                alt="PostaPlace Logo" 
-                style={{ height: '120px', width: 'auto', borderRadius: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }} 
-              />
-            </div>
-            <h1>PostaPlace</h1>
+          <header>
+            <h1>🌍 PostaPlace</h1>
             <p>Discover Hidden Travel Gems Across India</p>
           </header>
 
