@@ -19,7 +19,6 @@ export default function RootLayout({ children }) {
           <nav>
             <Link href="/">Home</Link>
             <Link href="/submit">Submit Place</Link>
-            <Link href="/explore">Explore</Link>
           </nav>
 
           <div className="container">

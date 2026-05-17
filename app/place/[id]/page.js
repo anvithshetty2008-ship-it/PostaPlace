@@ -31,7 +31,7 @@ export default function PlaceDetail({ params }) {
       <div className="empty-state">
         <h3>Place not found</h3>
         <p style={{ marginTop: '10px' }}>
-          Go back to <Link href="/explore">Explore</Link>.
+          Go back to <Link href="/">Home</Link>.
         </p>
       </div>
     )
@@ -82,8 +82,8 @@ export default function PlaceDetail({ params }) {
         })()}
         <p style={{ color: '#555', lineHeight: 1.7, marginTop: '20px' }}>{place.description || 'No description provided.'}</p>
         <div style={{ marginTop: '25px' }}>
-          <Link href="/explore" className="btn btn-secondary">
-            Back to Explore
+          <Link href="/" className="btn btn-secondary">
+            Back to Home
           </Link>
         </div>
       </div>
