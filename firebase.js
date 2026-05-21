@@ -118,7 +118,10 @@ export async function updatePlaceAddress(placeId, address) {
 export async function uploadImage(file, fileName) {
   try {
     const storageRef = ref(storage, `places/${Date.now()}-${fileName}`);
-    await uploadBytes(storageRef, file);
+    const metadata = {
+      cacheControl: 'public, max-age=31536000',
+    };
+    await uploadBytes(storageRef, file, metadata);
     const url = await getDownloadURL(storageRef);
     return url;
   } catch (error) {

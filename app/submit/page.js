@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { submitPlace, uploadImage } from '../../firebase'
+import imageCompression from 'browser-image-compression'
 
 export default function Submit() {
   const router = useRouter()
@@ -45,7 +46,14 @@ export default function Submit() {
     try {
       let photoUrl = null
       if (formData.photo) {
-        photoUrl = await uploadImage(formData.photo, formData.place_name)
+        const options = {
+          maxSizeMB: 0.2,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+          fileType: 'image/webp'
+        }
+        const compressedFile = await imageCompression(formData.photo, options)
+        photoUrl = await uploadImage(compressedFile, formData.place_name)
       }
 
       await submitPlace({
