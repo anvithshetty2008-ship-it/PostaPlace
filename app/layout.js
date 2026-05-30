@@ -2,8 +2,9 @@ import './globals.css'
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'PostaPlace - Hidden Travel Gems',
-  description: 'Discover and share hidden travel places',
+  title: 'PostaPlace - Hidden Travel Gems of India',
+  description: 'PostaPlace is a travel directory to discover and share hidden travel destinations, tourist attractions, and secret spots across India.',
+  keywords: ['travel', 'hidden gems', 'tourism', 'destinations', 'india', 'tourist attraction', 'places to visit'],
   applicationName: 'PostaPlace',
   appleWebApp: {
     title: 'PostaPlace',
