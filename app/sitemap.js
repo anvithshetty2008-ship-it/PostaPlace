@@ -1,7 +1,7 @@
 import { getVerifiedPlaces } from '../firebase'
 
 export default async function sitemap() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://postaplace.vercel.app';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://posta-place.vercel.app';
   
   // Get all verified places
   let places = [];
