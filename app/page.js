@@ -103,8 +103,8 @@ export default function Home() {
         <>
           <div className="places-grid">
             {places.map((p) => (
-              <Link key={p.id} href={`/place/${p.id}`} className="place-card">
-                {p.photo ? <img src={p.photo} alt={p.place_name || 'Place'} /> : <img alt="" />}
+              <Link key={p.id} href={`/place/${p.slug || p.id}`} className="place-card">
+                {p.photo ? <img src={p.photo} alt={p.place_name || 'Place'} loading="lazy" /> : <img alt="" loading="lazy" />}
                 <div className="place-card-content">
                   <h3>{p.place_name || 'Untitled place'}</h3>
                   <div className="place-card-meta">

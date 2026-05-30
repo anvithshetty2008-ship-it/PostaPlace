@@ -12,7 +12,7 @@ export default async function sitemap() {
   }
 
   const placeUrls = places.map((place) => ({
-    url: `${baseUrl}/place/${place.id}`,
+    url: `${baseUrl}/place/${place.slug || place.id}`,
     lastModified: place.created_date ? new Date(place.created_date.seconds * 1000) : new Date(),
     changeFrequency: 'weekly',
     priority: 0.8,

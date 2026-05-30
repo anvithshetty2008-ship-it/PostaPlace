@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { getPlaceById, ratePlace } from '../../../firebase'
+import { getPlaceById, ratePlace, getVerifiedPlacesPage } from '../../../firebase'
 
 export default function PlaceDetail({ params }) {
   const placeId = params?.id
@@ -11,6 +11,7 @@ export default function PlaceDetail({ params }) {
   const [hasRated, setHasRated] = useState(false)
   const [hoverRating, setHoverRating] = useState(0)
   const [isRating, setIsRating] = useState(false)
+  const [explorePlaces, setExplorePlaces] = useState([])
 
   useEffect(() => {
     if (placeId) {
@@ -25,6 +26,13 @@ export default function PlaceDetail({ params }) {
       try {
         const data = placeId ? await getPlaceById(placeId) : null
         if (mounted) setPlace(data)
+
+        if (data) {
+          const { places } = await getVerifiedPlacesPage(4, null)
+          if (mounted) {
+            setExplorePlaces(places.filter(p => p.id !== data.id).slice(0, 3))
+          }
+        }
       } finally {
         if (mounted) setLoading(false)
       }
@@ -151,11 +159,37 @@ export default function PlaceDetail({ params }) {
           );
         })()}
         <p style={{ color: '#555', lineHeight: 1.7, marginTop: '20px' }}>{place.description || 'No description provided.'}</p>
-        <div style={{ marginTop: '25px' }}>
+        <div style={{ marginTop: '25px', marginBottom: '40px' }}>
           <Link href="/" className="btn btn-secondary">
             Back to Home
           </Link>
         </div>
+
+        {explorePlaces.length > 0 && (
+          <div className="explore-more" style={{ marginTop: '40px', borderTop: '1px solid #eee', paddingTop: '30px' }}>
+            <h3 style={{ marginBottom: '20px', color: '#667eea' }}>Explore More Hidden Gems</h3>
+            <div className="places-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
+              {explorePlaces.map((p) => {
+                const avgRating = p.total_ratings ? (p.total_stars / p.total_ratings).toFixed(1) : 0;
+                return (
+                  <Link key={p.id} href={`/place/${p.slug || p.id}`} className="place-card">
+                    {p.photo ? <img src={p.photo} alt={p.place_name || 'Place'} loading="lazy" style={{ height: '140px' }} /> : <img alt="" loading="lazy" style={{ height: '140px' }} />}
+                    <div className="place-card-content" style={{ padding: '12px' }}>
+                      <h4 style={{ margin: '0 0 5px 0', fontSize: '16px', color: '#333' }}>{p.place_name}</h4>
+                      <div style={{ fontSize: '12px', color: '#777', marginBottom: '5px' }}>{p.state}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ color: avgRating > 0 ? '#fbbf24' : '#e5e7eb', fontSize: '14px', lineHeight: '1' }}>★</span>
+                        <span style={{ fontSize: '12px', color: '#777' }}>
+                          {p.total_ratings > 0 ? `${avgRating}` : 'New'}
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

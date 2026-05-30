@@ -28,8 +28,16 @@ export const storage = getStorage(app);
 // Functions for database operations
 export async function submitPlace(placeData) {
   try {
+    const slugBase = `${placeData.place_name || ''} ${placeData.state || ''}`
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)+/g, '');
+    const randomSuffix = Math.random().toString(36).substring(2, 6);
+    const slug = slugBase ? `${slugBase}-${randomSuffix}` : `place-${randomSuffix}`;
+
     const docRef = await addDoc(collection(db, 'places'), {
       ...placeData,
+      slug: slug,
       is_verified: false,
       created_date: new Date(),
       total_ratings: 0,
@@ -85,9 +93,18 @@ export async function getUnverifiedPlaces() {
   }
 }
 
-export async function getPlaceById(placeId) {
+export async function getPlaceById(idOrSlug) {
   try {
-    const snap = await getDoc(doc(db, 'places', placeId));
+    // Try to find by slug first
+    const q = query(collection(db, 'places'), where('slug', '==', idOrSlug), limit(1));
+    const snapshot = await getDocs(q);
+    if (!snapshot.empty) {
+      const docSnap = snapshot.docs[0];
+      return { id: docSnap.id, ...docSnap.data() };
+    }
+
+    // Fallback to document ID
+    const snap = await getDoc(doc(db, 'places', idOrSlug));
     if (!snap.exists()) return null;
     return { id: snap.id, ...snap.data() };
   } catch (error) {
