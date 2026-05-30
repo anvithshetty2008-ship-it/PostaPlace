@@ -78,7 +78,7 @@ export default function PlaceDetail({ params }) {
 
           return (
             <div className="rating-container" style={{ margin: '15px 0 25px 0', display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-              <div className="stars" style={{ display: 'flex', gap: '4px' }}>
+              <div className="stars" style={{ display: 'flex', margin: '0 -8px' }}>
                 {[1, 2, 3, 4, 5].map((star) => {
                   const isFilled = star <= (hoverRating || Math.round(avgRating));
                   return (
@@ -91,9 +91,12 @@ export default function PlaceDetail({ params }) {
                         cursor: hasRated || isRating ? 'default' : 'pointer',
                         color: isFilled ? '#fbbf24' : '#e5e7eb',
                         fontSize: '28px',
-                        transition: 'color 0.2s',
+                        padding: '8px',
+                        transition: 'color 0.2s, transform 0.1s',
                         lineHeight: '1',
-                        textShadow: isFilled ? '0 0 1px rgba(0,0,0,0.1)' : 'none'
+                        textShadow: isFilled ? '0 0 1px rgba(0,0,0,0.1)' : 'none',
+                        touchAction: 'manipulation',
+                        WebkitTapHighlightColor: 'transparent'
                       }}
                     >
                       ★
