@@ -110,6 +110,17 @@ export default function Home() {
                   <div className="place-card-meta">
                     {(p.state || 'Unknown state') + (p.district ? ` • ${p.district}` : '')}
                   </div>
+                  {(() => {
+                    const avgRating = p.total_ratings ? (p.total_stars / p.total_ratings).toFixed(1) : 0;
+                    return (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '6px', marginBottom: '8px' }}>
+                        <span style={{ color: avgRating > 0 ? '#fbbf24' : '#e5e7eb', fontSize: '18px', lineHeight: '1' }}>★</span>
+                        <span style={{ fontSize: '0.85em', color: '#777', fontWeight: '500' }}>
+                          {p.total_ratings > 0 ? `${avgRating} (${p.total_ratings})` : 'New'}
+                        </span>
+                      </div>
+                    );
+                  })()}
                   <p>{p.description || 'No description provided.'}</p>
                 </div>
               </Link>

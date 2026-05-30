@@ -2,12 +2,22 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { getPlaceById } from '../../../firebase'
+import { getPlaceById, ratePlace } from '../../../firebase'
 
 export default function PlaceDetail({ params }) {
   const placeId = params?.id
   const [place, setPlace] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [hasRated, setHasRated] = useState(false)
+  const [hoverRating, setHoverRating] = useState(0)
+  const [isRating, setIsRating] = useState(false)
+
+  useEffect(() => {
+    if (placeId) {
+      const rated = localStorage.getItem(`rated_${placeId}`)
+      if (rated) setHasRated(true)
+    }
+  }, [placeId])
 
   useEffect(() => {
     let mounted = true
@@ -42,6 +52,63 @@ export default function PlaceDetail({ params }) {
       {place.photo ? <img src={place.photo} alt={place.place_name || 'Place'} className="detail-image" /> : null}
       <div className="detail-content">
         <h2>{place.place_name || 'Untitled place'}</h2>
+        
+        {(() => {
+          const avgRating = place.total_ratings ? (place.total_stars / place.total_ratings).toFixed(1) : 0;
+          
+          const handleRate = async (value) => {
+            if (hasRated || isRating) return;
+            setIsRating(true);
+            try {
+              await ratePlace(placeId, value);
+              localStorage.setItem(`rated_${placeId}`, 'true');
+              setHasRated(true);
+              setPlace(prev => ({
+                ...prev,
+                total_ratings: (prev.total_ratings || 0) + 1,
+                total_stars: (prev.total_stars || 0) + value
+              }));
+            } catch (err) {
+              console.error('Failed to rate', err);
+              alert('Failed to submit rating. Please try again.');
+            } finally {
+              setIsRating(false);
+            }
+          };
+
+          return (
+            <div className="rating-container" style={{ margin: '15px 0 25px 0', display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+              <div className="stars" style={{ display: 'flex', gap: '4px' }}>
+                {[1, 2, 3, 4, 5].map((star) => {
+                  const isFilled = star <= (hoverRating || Math.round(avgRating));
+                  return (
+                    <span
+                      key={star}
+                      onClick={() => handleRate(star)}
+                      onMouseEnter={() => !hasRated && setHoverRating(star)}
+                      onMouseLeave={() => !hasRated && setHoverRating(0)}
+                      style={{
+                        cursor: hasRated || isRating ? 'default' : 'pointer',
+                        color: isFilled ? '#fbbf24' : '#e5e7eb',
+                        fontSize: '28px',
+                        transition: 'color 0.2s',
+                        lineHeight: '1',
+                        textShadow: isFilled ? '0 0 1px rgba(0,0,0,0.1)' : 'none'
+                      }}
+                    >
+                      ★
+                    </span>
+                  );
+                })}
+              </div>
+              <span style={{ fontSize: '0.95em', color: '#555', fontWeight: '500' }}>
+                {place.total_ratings > 0 ? `${avgRating} out of 5 (${place.total_ratings} ${place.total_ratings === 1 ? 'rating' : 'ratings'})` : 'No ratings yet. Be the first!'}
+              </span>
+              {hasRated && <span style={{ fontSize: '0.9em', color: '#10b981', fontWeight: '600' }}>✓ Rated</span>}
+            </div>
+          );
+        })()}
+
         <div className="detail-meta">
           <div>
             <strong>State</strong>

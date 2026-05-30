@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, query, where, getDocs, updateDoc, deleteDoc, doc, getDoc, orderBy, limit, startAfter, initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, query, where, getDocs, updateDoc, deleteDoc, doc, getDoc, orderBy, limit, startAfter, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, increment } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const firebaseConfig = {
@@ -32,6 +32,8 @@ export async function submitPlace(placeData) {
       ...placeData,
       is_verified: false,
       created_date: new Date(),
+      total_ratings: 0,
+      total_stars: 0,
     });
     return docRef.id;
   } catch (error) {
@@ -136,6 +138,18 @@ export async function uploadImage(file, fileName) {
     return url;
   } catch (error) {
     console.error('Error uploading image:', error);
+    throw error;
+  }
+}
+
+export async function ratePlace(placeId, ratingValue) {
+  try {
+    await updateDoc(doc(db, 'places', placeId), {
+      total_ratings: increment(1),
+      total_stars: increment(ratingValue)
+    });
+  } catch (error) {
+    console.error('Error rating place:', error);
     throw error;
   }
 }
