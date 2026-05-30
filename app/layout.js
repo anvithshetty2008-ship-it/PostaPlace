@@ -4,10 +4,16 @@ import Link from 'next/link'
 export const metadata = {
   title: 'PostaPlace - Hidden Travel Gems',
   description: 'Discover and share hidden travel places',
+  applicationName: 'PostaPlace',
+  appleWebApp: {
+    title: 'PostaPlace',
+    statusBarStyle: 'default',
+    capable: true,
+  },
   icons: {
-    icon: '/icon.png?v=2',
-    shortcut: '/icon.png?v=2',
-    apple: '/icon.png?v=2',
+    icon: '/icon.png?v=3',
+    shortcut: '/icon.png?v=3',
+    apple: '/icon.png?v=3',
   }
 }
 
