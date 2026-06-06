@@ -6,15 +6,19 @@ export const metadata = {
   description: 'PostaPlace is a travel directory to discover and share hidden travel destinations, tourist attractions, and secret spots across India.',
   keywords: ['travel', 'hidden gems', 'tourism', 'destinations', 'india', 'tourist attraction', 'places to visit'],
   applicationName: 'PostaPlace',
+  manifest: '/manifest.json',
   appleWebApp: {
     title: 'PostaPlace',
     statusBarStyle: 'default',
     capable: true,
   },
   icons: {
-    icon: '/icon.png?v=3',
-    shortcut: '/icon.png?v=3',
-    apple: '/icon.png?v=3',
+    icon: [
+      { url: '/favicon.ico?v=4', sizes: 'any' },
+      { url: '/icon.png?v=4', type: 'image/png' }
+    ],
+    shortcut: '/favicon.ico?v=4',
+    apple: '/icon.png?v=4',
   }
 }
 
