@@ -90,6 +90,26 @@ export default function Home() {
         </div>
       </div>
 
+      {(() => {
+        const uniqueStates = Array.from(new Set(places.map(p => p.state).filter(Boolean))).slice(0, 8);
+        if (uniqueStates.length === 0) return null;
+        return (
+          <div style={{ marginBottom: '40px' }}>
+            <h2 style={{ marginBottom: '15px', color: '#667eea', fontSize: '1.5rem' }}>Popular Destinations</h2>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+              {uniqueStates.map(state => {
+                const slug = state.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                return (
+                  <Link key={state} href={`/explore/${slug}`} className="btn btn-secondary" style={{ padding: '8px 16px', fontSize: '14px' }}>
+                    Explore {state}
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        );
+      })()}
+
       <h2 style={{ marginBottom: '20px', color: '#667eea' }}>Latest Places</h2>
       
       {!places.length ? (

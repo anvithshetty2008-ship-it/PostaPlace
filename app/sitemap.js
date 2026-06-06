@@ -18,6 +18,17 @@ export default async function sitemap() {
     priority: 0.8,
   }));
 
+  const uniqueStates = Array.from(new Set(places.map(p => p.state).filter(Boolean)));
+  const exploreUrls = uniqueStates.map(state => {
+    const slug = state.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    return {
+      url: `${baseUrl}/explore/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    };
+  });
+
   return [
     {
       url: baseUrl,
@@ -32,5 +43,6 @@ export default async function sitemap() {
       priority: 0.5,
     },
     ...placeUrls,
+    ...exploreUrls,
   ];
 }
