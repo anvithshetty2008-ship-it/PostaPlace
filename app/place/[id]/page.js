@@ -138,6 +138,59 @@ export default function PlaceDetail({ params }) {
             <div>{place.submitted_by_name || '—'}</div>
           </div>
         </div>
+
+        <div className="travel-info-cards" style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', 
+          gap: '20px', 
+          marginTop: '25px',
+          marginBottom: '25px'
+        }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)',
+            border: '1px solid #e2e8f0',
+            borderLeft: '5px solid #667eea',
+            borderRadius: '12px',
+            padding: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+          }}>
+            <div style={{ fontSize: '32px', lineHeight: '1' }}>⏰</div>
+            <div>
+              <span style={{ display: 'block', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', color: '#718096', marginBottom: '4px' }}>
+                Best Time & Timings
+              </span>
+              <strong style={{ fontSize: '15px', color: '#2d3748', fontWeight: '600' }}>
+                {place.timings || 'Flexible (Open 24/7)'}
+              </strong>
+            </div>
+          </div>
+
+          <div style={{
+            background: 'linear-gradient(135deg, #ffffff 0%, #fff7ed 100%)',
+            border: '1px solid #e2e8f0',
+            borderLeft: '5px solid #f97316',
+            borderRadius: '12px',
+            padding: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+          }}>
+            <div style={{ fontSize: '32px', lineHeight: '1' }}>☀️</div>
+            <div>
+              <span style={{ display: 'block', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', color: '#718096', marginBottom: '4px' }}>
+                Best Season to Visit
+              </span>
+              <strong style={{ fontSize: '15px', color: '#2d3748', fontWeight: '600' }}>
+                {place.best_season || 'Year-round'}
+              </strong>
+            </div>
+          </div>
+        </div>
+
         {(() => {
           const autoAddress = `${place.place_name}, ${place.district ? place.district + ', ' : ''}${place.state}`;
           const displayAddress = place.address || autoAddress;

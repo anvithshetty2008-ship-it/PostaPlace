@@ -27,19 +27,26 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <div className="app">
-          <header>
-            <h1>🌍 PostaPlace</h1>
-            <p>Discover Hidden Travel Gems Across India</p>
+          <header className="navbar">
+            <div className="nav-container">
+              <Link href="/" className="logo">
+                <span className="logo-emoji">🌍</span>
+                <span className="logo-text">PostaPlace</span>
+              </Link>
+              <nav className="nav-links">
+                <Link href="/" className="nav-link-item">Explore Gems</Link>
+                <Link href="/submit" className="nav-btn-primary">Submit Place</Link>
+              </nav>
+            </div>
           </header>
 
-          <nav>
-            <Link href="/">Home</Link>
-            <Link href="/submit">Submit Place</Link>
-          </nav>
-
-          <div className="container">
+          <main className="main-content">
             {children}
-          </div>
+          </main>
+
+          <footer className="footer">
+            <p>© {new Date().getFullYear()} PostaPlace. Built for travelers to discover the hidden wonders of India.</p>
+          </footer>
         </div>
       </body>
     </html>

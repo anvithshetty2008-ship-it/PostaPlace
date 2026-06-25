@@ -80,13 +80,18 @@ export default function Home() {
 
   return (
     <div>
-      <div className="home-section" style={{ marginBottom: '40px' }}>
-        <h2>Discover Hidden Travel Gems</h2>
-        <p>Share and explore the most amazing hidden travel places across India. From secret waterfalls to quiet beaches, help others find their next adventure.</p>
-        <div className="button-group">
-          <Link href="/submit" className="btn btn-primary">
-            Submit a Place
-          </Link>
+      <div className="hero-section">
+        <div className="hero-content">
+          <span className="hero-badge">✨ Explore India's Best Kept Secrets</span>
+          <h2 className="hero-title">Discover Hidden Travel Gems</h2>
+          <p className="hero-subtitle">
+            Skip the tourist traps. Find secret waterfalls, secluded beaches, pristine valleys, and ancient temples shared by local explorers.
+          </p>
+          <div className="hero-actions">
+            <Link href="/submit" className="btn btn-primary hero-btn">
+              Share a Hidden Place
+            </Link>
+          </div>
         </div>
       </div>
 

@@ -158,8 +158,10 @@ export default function Admin() {
                   </button>
                 </td>
                 <td style={{ maxWidth: '200px' }}>
-                  <div style={{ fontSize: '0.9em', maxHeight: '100px', overflowY: 'auto' }}>
-                    {place.description || 'No description'}
+                  <div style={{ fontSize: '0.9em', maxHeight: '150px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <div><strong>Desc:</strong> {place.description || '—'}</div>
+                    <div><strong>Timings:</strong> {place.timings || '—'}</div>
+                    <div><strong>Season:</strong> {place.best_season || '—'}</div>
                   </div>
                 </td>
                 <td>

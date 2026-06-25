@@ -16,6 +16,8 @@ export default function Submit() {
     district: '',
     category: 'Beach',
     description: '',
+    timings: '',
+    best_season: '',
     photo: null,
     submitted_by_name: '',
     phone: '',
@@ -128,6 +130,26 @@ export default function Submit() {
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           placeholder="Tell us about this place..."
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Best Time to Visit / Timings</label>
+        <input
+          type="text"
+          value={formData.timings}
+          onChange={(e) => setFormData({ ...formData, timings: e.target.value })}
+          placeholder="e.g., 6:00 AM - 6:00 PM, or Morning to Evening"
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Best Season to Visit</label>
+        <input
+          type="text"
+          value={formData.best_season}
+          onChange={(e) => setFormData({ ...formData, best_season: e.target.value })}
+          placeholder="e.g., October to March, or Monsoon Season"
         />
       </div>
 
