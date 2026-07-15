@@ -15,6 +15,7 @@ export default function Submit() {
     state: '',
     district: '',
     category: 'Beach',
+    adventure_type: '',
     description: '',
     timings: '',
     best_season: '',
@@ -120,9 +121,22 @@ export default function Submit() {
           <option>Forest</option>
           <option>Cave</option>
           <option>Temple</option>
+          <option>Adventure</option>
           <option>Other</option>
         </select>
       </div>
+
+      {formData.category === 'Adventure' && (
+        <div className="form-group">
+          <label>Adventure Type</label>
+          <input
+            type="text"
+            value={formData.adventure_type}
+            onChange={(e) => setFormData({ ...formData, adventure_type: e.target.value })}
+            placeholder="e.g., trekking, best for bike travel, rafting"
+          />
+        </div>
+      )}
 
       <div className="form-group">
         <label>Description</label>

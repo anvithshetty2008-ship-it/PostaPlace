@@ -133,6 +133,12 @@ export default function PlaceDetail({ params }) {
             <strong>Category</strong>
             <div>{place.category || '—'}</div>
           </div>
+          {place.adventure_type && (
+            <div>
+              <strong>Adventure Type</strong>
+              <div>{place.adventure_type}</div>
+            </div>
+          )}
           <div>
             <strong>Submitted by</strong>
             <div>{place.submitted_by_name || '—'}</div>

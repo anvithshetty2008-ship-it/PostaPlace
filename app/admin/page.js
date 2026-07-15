@@ -135,7 +135,13 @@ export default function Admin() {
                     <span style={{ color: '#888' }}>No Photo</span>
                   )}
                 </td>
-                <td><strong>{place.place_name}</strong><br/><span style={{ fontSize: '0.85em', color: '#666' }}>{place.category}</span></td>
+                <td>
+                  <strong>{place.place_name}</strong><br/>
+                  <span style={{ fontSize: '0.85em', color: '#666' }}>
+                    {place.category}
+                    {place.adventure_type ? ` (${place.adventure_type})` : ''}
+                  </span>
+                </td>
                 <td>
                   {place.district ? `${place.district}, ` : ''}{place.state}
                 </td>
